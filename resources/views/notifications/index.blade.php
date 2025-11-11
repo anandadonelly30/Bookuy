@@ -184,7 +184,7 @@
             <span>9:41</span>
             <span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i> <i class="fas fa-battery-full"></i></span>
         </div>
-        
+
         <div class="header">
             <i class="fas fa-arrow-left back-btn" onclick="window.location.href = '/'"></i>
             <div class="logo-small">
@@ -196,7 +196,7 @@
         <div class="notification-section" style="padding-bottom: 100px;">
             <!-- Today Section -->
             <div class="date-header">Today</div>
-            
+
             <div class="notification-item">
                 <div class="notification-icon discount">
                     <i class="fas fa-tag"></i>
@@ -210,7 +210,7 @@
 
             <!-- Yesterday Section -->
             <div class="date-header">Yesterday</div>
-            
+
             <div class="notification-item">
                 <div class="notification-icon wallet">
                     <i class="fas fa-wallet"></i>
@@ -235,7 +235,7 @@
 
             <!-- May 7, 2025 Section -->
             <div class="date-header">May 7, 2025</div>
-            
+
             <div class="notification-item">
                 <div class="notification-icon credit">
                     <i class="fas fa-credit-card"></i>
@@ -257,7 +257,7 @@
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
+
         <div class="bottom-nav">
             <a href="/" class="nav-item">
                 <i class="fas fa-home"></i>
