@@ -1,0 +1,33 @@
+
+<!-- === NAMA_FILE: resources/views/checkout/success.blade.php === -->
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-white leading-tight">
+            Checkout Success
+        </h2>
+    </x-slot>
+
+    <div class="py-6">
+        <div class="max-w-sm mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            
+            <img src="https://placehold.co/300x300/E0E7FF/3B82F6?text=Congratulations!" alt="Congratulations" class="mx-auto w-64 h-64">
+            
+            <h3 class="mt-6 text-2xl font-bold text-gray-900 dark:text-gray-100">Congratulations!</h3>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">Your order has been placed.</p>
+            
+            <div class="mt-6">
+                 <a href="#" class="w-full flex justify-center items-center px-6 py-3 bg-blue-600 border border-transparent rounded-md font-semibold text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    Track Your Order
+                </a>
+            </div>
+            
+             <div class="mt-4">
+                 <a href="{{ route('dashboard') }}" class="w-full flex justify-center items-center px-6 py-3 bg-gray-200 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-gray-800 dark:text-gray-200 uppercase tracking-widest hover:bg-gray-300 dark:hover:bg-gray-600">
+                    Back to Home
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</x-app-layout>
+

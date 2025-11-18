@@ -1,0 +1,39 @@
+/* Import Poppins font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sugo Pro Classic Regular Trial - Local Font */
+@font-face {
+    font-family: 'Sugo Pro Classic Regular Trial';
+    src: local('Sugo Pro Classic Regular Trial'),
+         local('SugoProClassicRegularTrial'),
+         local('Sugo Pro Classic');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@layer base {
+    body {
+        @apply font-sans text-text-primary antialiased;
+    }
+    
+    /* Apply header font to all heading elements */
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-header;
+    }
+}
+
+@layer components {
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+}

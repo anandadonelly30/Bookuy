@@ -1,0 +1,76 @@
+<x-app-layout>
+    {{-- Header untuk halaman Dashboard --}}
+    <x-slot name="header">
+        <x-app-header title="Homepage">
+            <x-slot name="rightContent">
+                {{-- Icon untuk menu atau notifikasi di kanan atas --}}
+                <a href="{{ route('profile.edit') }}" class="text-white-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                </a>
+            </x-slot>
+        </x-app-header>
+    </x-slot>
+
+    {{-- Konten utama Homepage --}}
+    <div class="py-6 px-4">
+        {{-- Greeting / Banner --}}
+        <div class="bg-primary-blue rounded-lg p-4 mb-6 flex justify-between items-center">
+            <div>
+                <p class="text-lg font-semibold">Hello, {{ Auth::user()->name }}!</p>
+                <p class="text-sm">Welcome back to Bookuy.</p>
+            </div>
+            {{-- Icon atau gambar di kanan banner --}}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white-text">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.079 0-2.15.262-3.042.75l-.005.003-.002.001-.002.001A3.325 3.325 0 003.75 5.25c0 .879.46 1.704 1.2 2.163v10.125a3.75 3.75 0 003.75 3.75H16.5a3.75 3.75 0 003.75-3.75V7.414c.23-.053.454-.119.673-.194.205-.075.41-.16.607-.26.462-.234.92-.647 1.106-1.135l.004-.01a.522.522 0 00-.116-.292C21.715 5.146 21.054 5.25 20.25 5.25c-1.079 0-2.15-.262-3.042-.75V6.042zm-8.823 4.878A3.375 3.375 0 0112 3.75c1.079 0 2.15.262 3.042.75m-9.456 8.875a.868.868 0 00-.352 1.718l.231.023A8.927 8.927 0 0012 18c2.115 0 4.198-.137 6.24-.404.134-.017.29-.035.38-.067.129-.047.257-.113.341-.192A7.69 7.69 0 0021 12.75c0-.936-.533-1.85-1.292-2.381a1.125 1.125 0 00-1.446-.873 1.125 1.125 0 00-.738.67M12 7.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 7.5zM12 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zm0 3a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zm0 3a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75z" />
+            </svg>
+        </div>
+
+        {{-- Section "Recommended for you" --}}
+        <h2 class="text-xl font-bold mb-4">Recommended for you</h2>
+        <div class="grid grid-cols-2 gap-4">
+            @forelse ($products as $product)
+                <div class="bg-card-bg rounded-lg shadow-md overflow-hidden">
+                    <img src="{{ $product->image_url ? asset('storage/' . $product->image_url) : asset('images/default-book.png') }}" alt="{{ $product->name }}" class="w-full h-40 object-cover">
+                    <div class="p-3">
+                        <h3 class="text-base font-semibold mb-1 truncate">{{ $product->name }}</h3>
+                        <p class="text-sm text-secondary-text mb-2">{{ Str::limit($product->description, 50) }}</p>
+                        <p class="text-md font-bold text-primary-blue">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                        <form action="{{ route('cart.add', $product) }}" method="POST" class="mt-2">
+                            @csrf
+                            <button type="submit" class="w-full bg-primary-blue hover:bg-light-blue text-white-text font-semibold py-2 px-3 rounded-md text-sm transition duration-200">
+                                Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <p class="col-span-2 text-center text-secondary-text">No products found. <a href="/products/create" class="text-primary-blue hover:underline">Add some?</a></p>
+            @endforelse
+        </div>
+
+        {{-- Section "Second Favorites" (contoh, bisa disesuaikan) --}}
+        <h2 class="text-xl font-bold mt-8 mb-4">Second Favorites</h2>
+        <div class="grid grid-cols-2 gap-4">
+             @forelse ($products as $product)
+                <div class="bg-card-bg rounded-lg shadow-md overflow-hidden">
+                    <img src="{{ $product->image_url ? asset('storage/' . $product->image_url) : asset('images/default-book.png') }}" alt="{{ $product->name }}" class="w-full h-40 object-cover">
+                    <div class="p-3">
+                        <h3 class="text-base font-semibold mb-1 truncate">{{ $product->name }}</h3>
+                        <p class="text-sm text-secondary-text mb-2">{{ Str::limit($product->description, 50) }}</p>
+                        <p class="text-md font-bold text-primary-blue">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                        <form action="{{ route('cart.add', $product) }}" method="POST" class="mt-2">
+                            @csrf
+                            <button type="submit" class="w-full bg-primary-blue hover:bg-light-blue text-white-text font-semibold py-2 px-3 rounded-md text-sm transition duration-200">
+                                Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <p class="col-span-2 text-center text-secondary-text">No products found. <a href="/products/create" class="text-primary-blue hover:underline">Add some?</a></p>
+            @endforelse
+        </div>
+    </div>
+</x-app-layout>
