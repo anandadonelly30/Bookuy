@@ -14,7 +14,7 @@
                     @if(Auth::user()->profile_picture)
                         <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Profile" class="w-full h-full object-cover">
                     @else
-                        <img src="{{ asset('logo/Logo%20Blue.jpeg') }}" alt="Profile" class="w-full h-full object-contain bg-white p-1">
+                        <img src="{{ asset('logo/Logo Blue.png') }}" alt="Profile" class="w-full h-full object-contain bg-white p-1">
                     @endif
                 </div>
 

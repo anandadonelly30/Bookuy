@@ -1,11 +1,19 @@
 <x-guest-layout>
+    @php
+        // Guard fallback to avoid undefined variable errors if route binding breaks
+        $products = $products ?? collect();
+        $recommendedBooks = $recommendedBooks ?? collect();
+        $popularBooks = $popularBooks ?? collect();
+        $categories = $categories ?? [];
+        $locations = $locations ?? [];
+    @endphp
     <div class="min-h-screen bg-gray-50 pb-20">
         <!-- Header Biru dengan Welcome & Logo -->
         <div class="bg-primary text-white px-4 pt-3 pb-4">
             <!-- Top Bar: Logo & Cart -->
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-2">
-                    <img src="{{ asset('logo/Logo%20White.jpeg') }}" alt="Bookuy" class="h-10 w-10 rounded-lg object-contain">
+                    <img src="{{ asset('logo/Logo White.png') }}" alt="Bookuy" class="h-10 w-10 rounded-lg object-contain">
                     <div class="leading-tight">
                         <p class="text-xs opacity-90">Welcome</p>
                         <p class="text-lg font-bold font-header">{{ explode(' ', Auth::user()->name)[0] }}</p>

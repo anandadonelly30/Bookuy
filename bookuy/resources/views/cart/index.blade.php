@@ -9,7 +9,7 @@
                     </svg>
                 </a>
                 <div class="flex items-center gap-2">
-                    <img src="{{ asset('logo/Logo%20White.jpeg') }}" alt="Bookuy" class="h-8 w-8 rounded-lg object-contain">
+                    <img src="{{ asset('logo/Logo White.png') }}" alt="Bookuy" class="h-8 w-8 rounded-lg object-contain">
                     <h1 class="text-xl font-bold font-header">Keranjang</h1>
                 </div>
             </div>

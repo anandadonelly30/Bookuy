@@ -10,7 +10,7 @@
             </a>
             
             <!-- Logo Bookuy -->
-            <img src="{{ asset('logo/Logo%20White.jpeg') }}" alt="Bookuy" class="h-8 rounded-lg object-contain">
+            <img src="{{ asset('logo/Logo White.png') }}" alt="Bookuy" class="h-8 rounded-lg object-contain">
         </div>
         
         <!-- Title -->

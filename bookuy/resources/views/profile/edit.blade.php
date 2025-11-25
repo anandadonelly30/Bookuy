@@ -10,7 +10,7 @@
             </a>
             
             <!-- Logo Bookuy -->
-            <img src="{{ asset('logo/Logo%20White.jpeg') }}" alt="Bookuy" class="h-8 rounded-lg object-contain">
+            <img src="{{ asset('logo/Logo White.png') }}" alt="Bookuy" class="h-8 rounded-lg object-contain">
         </div>
         
         <!-- Title -->
@@ -23,7 +23,7 @@
                     @if(Auth::user()->profile_picture)
                         <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Profile" class="w-full h-full object-cover">
                     @else
-                        <img src="{{ asset('logo/Logo%20Blue.jpeg') }}" alt="Profile" class="w-full h-full object-contain bg-white p-2">
+                        <img src="{{ asset('logo/Logo Blue.png') }}" alt="Profile" class="w-full h-full object-contain bg-white p-2">
                     @endif
                 </div>
                 <label for="profile_picture" class="absolute -bottom-1 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-gray-50">

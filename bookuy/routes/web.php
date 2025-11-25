@@ -14,8 +14,13 @@ use App\Http\Controllers\DashboardController;
 |--------------------------------------------------------------------------
 */
 
-// Halaman utama (dashboard/homepage)
-Route::get('/', [DashboardController::class, 'index'])
+// Redirect root ke dashboard agar konsisten dengan konvensi /dashboard
+Route::get('/', function () {
+    return redirect()->route('dashboard');
+});
+
+// Halaman utama (dashboard/homepage) dengan controller agar variabel terpasok
+Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');
 

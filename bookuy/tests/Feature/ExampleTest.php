@@ -13,7 +13,11 @@ class ExampleTest extends TestCase
     public function test_the_application_returns_a_successful_response(): void
     {
         $response = $this->get('/');
+        // Root now redirects first to /dashboard (auth protected). We assert that initial redirect.
+        $response->assertStatus(302)->assertRedirect('/dashboard');
 
-        $response->assertStatus(200);
+        // Follow redirects and ensure we land on login page eventually
+        $final = $this->followingRedirects()->get('/');
+        $final->assertStatus(200)->assertSee('Log in');
     }
 }

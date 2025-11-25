@@ -3,7 +3,7 @@
         
         <!-- Logo -->
         <div class="mb-8 text-center">
-            <img src="{{ asset('logo/Logo Blue.jpeg') }}" alt="Bookuy" class="h-20 w-20 mx-auto rounded-2xl shadow-lg mb-4">
+            <img src="{{ asset('logo/Logo Blue.png') }}" alt="Bookuy" class="h-20 w-20 mx-auto rounded-2xl shadow-lg mb-4">
             <h1 class="text-3xl font-bold font-header text-primary">Bookuy</h1>
             <p class="text-sm text-gray-500 mt-2">Welcome back! Please login to your account</p>
         </div>
