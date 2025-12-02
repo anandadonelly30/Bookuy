@@ -14,8 +14,14 @@ use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
-    // == USE CASE: CheckOut (View) ==
-    public function index()
+    /**
+     * Show the checkout page with order review.
+     * 
+     * USE CASE: Checkout (View)
+     * Displays cart items, default address, and price breakdown
+     * (subtotal, admin fee, shipping fee, total) for order review.
+     */
+    public function showCheckoutPage()
     {
         $user = Auth::user();
         $cartItems = CartItem::with('product')->where('user_id', $user->id)->get();
@@ -39,8 +45,14 @@ class CheckoutController extends Controller
         return view('checkout.index', compact('cartItems', 'defaultAddress', 'subTotal', 'adminFee', 'shippingFee', 'total'));
     }
 
-    // == USE CASE: CheckOut (Process) ==
-    public function process(Request $request)
+    /**
+     * Process the order checkout and create order records.
+     * 
+     * USE CASE: Checkout (Process)
+     * Validates payment info, creates Order and OrderItems in a transaction,
+     * clears the shopping cart, creates notification, and redirects to success page.
+     */
+    public function processOrderCheckout(Request $request)
     {
         $user = Auth::user();
         $cartItems = CartItem::with('product')->where('user_id', $user->id)->get();
@@ -65,25 +77,26 @@ class CheckoutController extends Controller
 
         // Gunakan DB Transaction
         $order = DB::transaction(function () use ($user, $cartItems, $request, $subTotal, $adminFee, $shippingFee, $total) {
-            // 1. Buat Order
+            // 1. Buat Order (using class diagram field names)
             $order = Order::create([
                 'user_id' => $user->id,
                 'address_id' => $request->address_id,
                 'sub_total' => $subTotal,
                 'admin_fee' => $adminFee,
                 'shipping_fee' => $shippingFee,
-                'total' => $total,
-                'status' => 'pending', // atau 'packing' jika pembayaran langsung sukses
+                'total_amount' => $total,  // Updated field name from class diagram
+                'status' => 'ONGOING',     // Updated enum value from class diagram
                 'payment_method' => $request->payment_method,
+                'payment_status' => 'PENDING', // New field from class diagram
             ]);
 
-            // 2. Pindahkan item dari keranjang ke order_items
+            // 2. Pindahkan item dari keranjang ke order_items (using class diagram field names)
             foreach ($cartItems as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $item->product_id,
+                    'book_id' => $item->product_id,  // Updated field name from class diagram
                     'quantity' => $item->quantity,
-                    'price' => $item->product->price, // Simpan harga saat ini
+                    'price_per_unit' => $item->product->price, // Updated field name from class diagram
                     'product_name' => $item->product->name, // Simpan nama saat ini
                 ]);
             }
@@ -91,10 +104,10 @@ class CheckoutController extends Controller
             // 3. Kosongkan keranjang
             CartItem::where('user_id', $user->id)->delete();
             
-            // 4. Buat Notifikasi (Contoh)
+            // 4. Buat Notifikasi (using class diagram field names)
             $user->notifications()->create([
                 'title' => 'Order Diterima!',
-                'message' => 'Order #' . $order->id . ' telah berhasil dibuat dan sedang diproses.',
+                'description' => 'Order #' . $order->id . ' telah berhasil dibuat dan sedang diproses.',  // Updated field name
                 'icon' => 'wallet', // ganti icon sesuai
             ]);
 
@@ -105,14 +118,20 @@ class CheckoutController extends Controller
         return redirect()->route('checkout.success', $order);
     }
 
-    public function success(Order $order)
+    /**
+     * Show the order success page after checkout.
+     * 
+     * USE CASE: Checkout (Success)
+     * Displays order confirmation with order details, items, and address.
+     * Validates that the order belongs to the authenticated user.
+     */
+    public function showOrderSuccessPage(Order $order)
     {
-        // Pastikan order ini milik user yang login
+        // Ensure order belongs to authenticated user
         if ($order->user_id !== Auth::id()) {
-            abort(403);
+            abort(403, 'Unauthorized action.');
         }
         
-        // Sesuai screenshot "Checkout Success"
         return view('checkout.success', compact('order'));
     }
 }

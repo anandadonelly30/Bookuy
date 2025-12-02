@@ -6,20 +6,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    // Updated to match class diagram
     protected $fillable = [
-        'name',
+        'username',        // Renamed from 'name'
         'email',
         'password',
-        'gender',
-        'semester',
-        'description',
-        'phone_number',
-        'profile_picture',
+        'gender',          // Enhancement (not in diagram)
+        'semester',        // Enhancement (not in diagram)
+        'description',     // Enhancement (not in diagram)
+        'no_telp',         // Renamed from 'phone_number'
+        'profile_picture', // Enhancement (not in diagram)
+        'role',
     ];
 
     protected $hidden = [
@@ -58,5 +61,22 @@ class User extends Authenticatable
     public function defaultAddress()
     {
         return $this->hasOne(Address::class)->where('is_default', true);
+    }
+    
+    // Backward compatibility accessors for views using old field names
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->username,
+            set: fn ($value) => ['username' => $value],
+        );
+    }
+    
+    protected function phoneNumber(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->no_telp,
+            set: fn ($value) => ['no_telp' => $value],
+        );
     }
 }

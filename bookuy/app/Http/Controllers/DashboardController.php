@@ -8,9 +8,17 @@ use App\Models\Product;
 class DashboardController extends Controller
 {
     /**
-     * Display the homepage/dashboard with products, filters, and search
+     * Display the homepage with product listings, filters, and search.
+     * 
+     * Shows all products with support for:
+     * - Search by name, description, or author
+     * - Filter by mata kuliah (course subject)
+     * - Filter by location
+     * - Filter by price range
+     * - Sort by price or newest first
+     * Also displays recommended and popular books.
      */
-    public function index(Request $request)
+    public function showHomepageWithProducts(Request $request)
     {
         $query = Product::query();
 

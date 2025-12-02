@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // Create test user
         User::factory()->create([
-            'name' => 'Test User',
+            'username' => 'Test User',  // Updated to match class diagram
             'email' => 'test@example.com',
         ]);
 

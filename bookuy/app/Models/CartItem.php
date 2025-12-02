@@ -14,7 +14,7 @@ class CartItem extends Model
         'user_id',
         'product_id',
         'quantity',
-        'type'
+        'type'  // Now stores 'BUY' or 'RENT' (uppercase) to match class diagram
     ];
 
     public function user(): BelongsTo
@@ -25,6 +25,17 @@ class CartItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+    
+    // Alias for class diagram compatibility (bookId instead of product_id)
+    public function getBookIdAttribute()
+    {
+        return $this->product_id;
+    }
+    
+    public function setBookIdAttribute($value)
+    {
+        $this->attributes['product_id'] = $value;
     }
 
     public function getSubtotalAttribute()

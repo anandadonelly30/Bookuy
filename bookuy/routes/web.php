@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 
 // Halaman utama (dashboard/homepage) dengan controller agar variabel terpasok
-Route::get('/dashboard', [DashboardController::class, 'index'])
+Route::get('/dashboard', [DashboardController::class, 'showHomepageWithProducts'])
     ->middleware(['auth'])
     ->name('dashboard');
 
@@ -29,34 +29,34 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::middleware('auth')->group(function () {
     
     // == USE CASE: Profile/Account ==
-    Route::get('/account', [ProfileController::class, 'index'])->name('profile.index');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/account', [ProfileController::class, 'showAccountPage'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'showEditProfileForm'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'updateUserProfile'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'deleteUserAccount'])->name('profile.destroy');
 
     // == USE CASE: ViewCart ==
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-    Route::patch('/cart/update/{cartItem}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/remove/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::get('/cart', [CartController::class, 'viewShoppingCart'])->name('cart.index');
+    Route::post('/cart/add/{product}', [CartController::class, 'addProductToCart'])->name('cart.add');
+    Route::patch('/cart/update/{cartItem}', [CartController::class, 'updateCartItemQuantity'])->name('cart.update');
+    Route::delete('/cart/remove/{cartItem}', [CartController::class, 'removeProductFromCart'])->name('cart.remove');
 
     // == USE CASE: ManageAddress ==
-    Route::get('/addresses', [AddressController::class, 'index'])->name('address.index');
-    Route::get('/addresses/create', [AddressController::class, 'create'])->name('address.create');
-    Route::post('/addresses', [AddressController::class, 'store'])->name('address.store');
-    Route::get('/addresses/{address}/edit', [AddressController::class, 'edit'])->name('address.edit');
-    Route::patch('/addresses/{address}', [AddressController::class, 'update'])->name('address.update');
-    Route::delete('/addresses/{address}', [AddressController::class, 'destroy'])->name('address.destroy');
-    Route::patch('/addresses/{address}/set-default', [AddressController::class, 'setDefault'])->name('address.setDefault');
+    Route::get('/addresses', [AddressController::class, 'viewUserAddresses'])->name('address.index');
+    Route::get('/addresses/create', [AddressController::class, 'showCreateAddressForm'])->name('address.create');
+    Route::post('/addresses', [AddressController::class, 'createNewAddress'])->name('address.store');
+    Route::get('/addresses/{address}/edit', [AddressController::class, 'showEditAddressForm'])->name('address.edit');
+    Route::patch('/addresses/{address}', [AddressController::class, 'updateExistingAddress'])->name('address.update');
+    Route::delete('/addresses/{address}', [AddressController::class, 'deleteAddress'])->name('address.destroy');
+    Route::patch('/addresses/{address}/set-default', [AddressController::class, 'markAddressAsDefault'])->name('address.setDefault');
 
     // == USE CASE: CheckOut ==
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
-    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout', [CheckoutController::class, 'showCheckoutPage'])->name('checkout.index');
+    Route::post('/checkout/process', [CheckoutController::class, 'processOrderCheckout'])->name('checkout.process');
+    Route::get('/checkout/success/{order}', [CheckoutController::class, 'showOrderSuccessPage'])->name('checkout.success');
 
     // == USE CASE: ViewNotif ==
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index'); // <-- FIX: Tadinya Route.get, sekarang Route::get
-    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::get('/notifications', [NotificationController::class, 'viewUserNotifications'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markNotificationAsRead'])->name('notifications.read');
 
 });
 

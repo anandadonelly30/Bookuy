@@ -12,48 +12,48 @@ class NotificationSeeder extends Seeder
     {
         // Ensure we have at least one user
         $user = User::first() ?? User::factory()->create([
-            'name' => 'Demo User',
+            'username' => 'Demo User',  // Updated to match class diagram
             'email' => 'demo@example.com',
         ]);
 
         $samples = [
             [
                 'title' => '50% Special Discount!',
-                'message' => 'Special promotion only today',
+                'description' => 'Special promotion only today',  // Updated field name
                 'icon' => 'discount',
-                'read_at' => null,
+                'is_read' => false,  // Updated field name (boolean)
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'title' => 'Top Up E-wallet Successfully!',
-                'message' => 'You have top up e-wallet',
+                'description' => 'You have top up e-wallet',  // Updated field name
                 'icon' => 'wallet',
-                'read_at' => null,
+                'is_read' => false,  // Updated field name (boolean)
                 'created_at' => now()->subDay(),
                 'updated_at' => now()->subDay(),
             ],
             [
                 'title' => 'New Service Available!',
-                'message' => 'Now you can track order in real-time',
+                'description' => 'Now you can track order in real-time',  // Updated field name
                 'icon' => 'service',
-                'read_at' => null,
+                'is_read' => false,  // Updated field name (boolean)
                 'created_at' => now()->subDay(),
                 'updated_at' => now()->subDay(),
             ],
             [
                 'title' => 'Credit Card Connected!',
-                'message' => 'Credit card has been linked',
+                'description' => 'Credit card has been linked',  // Updated field name
                 'icon' => 'card',
-                'read_at' => now()->subMonths(6),
+                'is_read' => true,  // Updated field name (boolean)
                 'created_at' => now()->setDate(2025,5,7),
                 'updated_at' => now()->setDate(2025,5,7),
             ],
             [
                 'title' => 'Account Setup Successfully!',
-                'message' => 'Your account has been created',
+                'description' => 'Your account has been created',  // Updated field name
                 'icon' => 'success',
-                'read_at' => now()->subMonths(6),
+                'is_read' => true,  // Updated field name (boolean)
                 'created_at' => now()->setDate(2025,5,7),
                 'updated_at' => now()->setDate(2025,5,7),
             ],

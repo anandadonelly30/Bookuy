@@ -9,8 +9,14 @@ use App\Models\CartItem;
 
 class CartController extends Controller
 {
-    // == USE CASE: ViewCart ==
-    public function index(Request $request)
+    /**
+     * View the shopping cart with products.
+     * 
+     * USE CASE: ViewCart
+     * Displays cart items filtered by type (BUY/RENT) with price calculations
+     * including subtotal, admin fee, shipping fee, and total.
+     */
+    public function viewShoppingCart(Request $request)
     {
         $userId = Auth::id();
         $activeType = $request->input('type', 'sell');
@@ -20,16 +26,23 @@ class CartController extends Controller
             $activeType = 'sell';
         }
 
+        // Map URL parameter to database enum values (class diagram)
+        $dbType = match($activeType) {
+            'sell' => 'BUY',
+            'rent' => 'RENT',
+            default => 'BUY'
+        };
+
         // Get cart items filtered by type
         $cartItems = CartItem::with('product')
             ->where('user_id', $userId)
-            ->where('type', $activeType)
+            ->where('type', $dbType)
             ->orderByDesc('created_at')
             ->get();
 
-        // Get counts for tabs
-        $sellCount = CartItem::where('user_id', $userId)->where('type', 'sell')->count();
-        $rentCount = CartItem::where('user_id', $userId)->where('type', 'rent')->count();
+        // Get counts for tabs (using database enum values)
+        $sellCount = CartItem::where('user_id', $userId)->where('type', 'BUY')->count();
+        $rentCount = CartItem::where('user_id', $userId)->where('type', 'RENT')->count();
             
         // Logika untuk menghitung subtotal, dll.
         $subTotal = $cartItems->sum(function($item) {
@@ -44,7 +57,14 @@ class CartController extends Controller
         return view('cart.index', compact('cartItems', 'subTotal', 'adminFee', 'shippingFee', 'total', 'activeType', 'sellCount', 'rentCount'));
     }
 
-    public function add(Request $request, Product $product)
+    /**
+     * Add a product to the shopping cart.
+     * 
+     * Validates stock availability, checks if product already exists in cart,
+     * maps product type to CartItem enum (sell→BUY, rent→RENT),
+     * and creates or updates cart item accordingly.
+     */
+    public function addProductToCart(Request $request, Product $product)
     {
         // Check if product has stock
         if ($product->stock <= 0) {
@@ -69,11 +89,18 @@ class CartController extends Controller
                 return redirect()->back()->with('error', 'Maximum stock reached');
             }
         } else {
+            // Map product type to CartItem enum values (class diagram)
+            $cartType = match($product->type) {
+                'sell' => 'BUY',
+                'rent' => 'RENT',
+                default => 'BUY'
+            };
+            
             CartItem::create([
                 'user_id' => Auth::id(),
                 'product_id' => $product->id,
                 'quantity' => $request->input('quantity', 1),
-                'type' => $product->type,
+                'type' => $cartType,
             ]);
         }
 
@@ -88,7 +115,13 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Product added to cart');
     }
 
-    public function update(Request $request, CartItem $cartItem)
+    /**
+     * Update the quantity of a cart item.
+     * 
+     * Validates ownership, checks quantity constraints (min 1, max stock),
+     * and updates the cart item quantity in the database.
+     */
+    public function updateCartItemQuantity(Request $request, CartItem $cartItem)
     {
         // Pastikan item milik user
         if ($cartItem->user_id !== Auth::id()) {
@@ -128,7 +161,12 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Cart updated');
     }
 
-    public function remove(CartItem $cartItem)
+    /**
+     * Remove a product from the shopping cart.
+     * 
+     * Validates ownership and deletes the cart item permanently.
+     */
+    public function removeProductFromCart(CartItem $cartItem)
     {
         // Pastikan item milik user
         if ($cartItem->user_id !== Auth::id()) {

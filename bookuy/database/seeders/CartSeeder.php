@@ -30,12 +30,13 @@ class CartSeeder extends Seeder
         $matematikaRent = Product::where('name', 'Matematika I')->where('type', 'rent')->first();
         $mpbRent = Product::where('name', 'MPB Fundamental MPB')->where('type', 'rent')->first();
 
-        // Add to cart - Buy items
+        // Add to cart - Buy items (using class diagram enum 'BUY')
         if ($matematika) {
             CartItem::create([
                 'user_id' => $user->id,
                 'product_id' => $matematika->id,
                 'quantity' => 2,
+                'type' => 'BUY',  // Class diagram enum value
             ]);
         }
 
@@ -44,6 +45,7 @@ class CartSeeder extends Seeder
                 'user_id' => $user->id,
                 'product_id' => $mpb->id,
                 'quantity' => 1,
+                'type' => 'BUY',  // Class diagram enum value
             ]);
         }
 
@@ -52,15 +54,17 @@ class CartSeeder extends Seeder
                 'user_id' => $user->id,
                 'product_id' => $pweb->id,
                 'quantity' => 1,
+                'type' => 'BUY',  // Class diagram enum value
             ]);
         }
 
-        // Add to cart - Rent items
+        // Add to cart - Rent items (using class diagram enum 'RENT')
         if ($matematikaRent) {
             CartItem::create([
                 'user_id' => $user->id,
                 'product_id' => $matematikaRent->id,
                 'quantity' => 1,
+                'type' => 'RENT',  // Class diagram enum value
             ]);
         }
 
@@ -69,6 +73,7 @@ class CartSeeder extends Seeder
                 'user_id' => $user->id,
                 'product_id' => $mpbRent->id,
                 'quantity' => 2,
+                'type' => 'RENT',  // Class diagram enum value
             ]);
         }
     }

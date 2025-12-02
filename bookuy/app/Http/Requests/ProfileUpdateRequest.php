@@ -16,7 +16,9 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            // Accept both old and new field names for backward compatibility
+            'name' => ['sometimes', 'string', 'max:255'],
+            'username' => ['sometimes', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -29,7 +31,27 @@ class ProfileUpdateRequest extends FormRequest
             'semester' => ['nullable', 'integer', 'min:1', 'max:8'],
             'description' => ['nullable', 'string', 'max:1000'],
             'phone_number' => ['nullable', 'string', 'max:20'],
+            'no_telp' => ['nullable', 'string', 'max:20'],
             'profile_picture' => ['nullable', 'image', 'max:2048'],
+            'role' => ['nullable', 'string', 'in:user,admin,seller'],
         ];
+    }
+    
+    protected function prepareForValidation()
+    {
+        // Map old field names to new ones for backward compatibility
+        $data = [];
+        
+        if ($this->has('name') && !$this->has('username')) {
+            $data['username'] = $this->input('name');
+        }
+        
+        if ($this->has('phone_number') && !$this->has('no_telp')) {
+            $data['no_telp'] = $this->input('phone_number');
+        }
+        
+        if (!empty($data)) {
+            $this->merge($data);
+        }
     }
 }

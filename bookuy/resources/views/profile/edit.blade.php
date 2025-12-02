@@ -26,13 +26,13 @@
                         <img src="{{ asset('logo/Logo Blue.png') }}" alt="Profile" class="w-full h-full object-contain bg-white p-2">
                     @endif
                 </div>
-                <label for="profile_picture" class="absolute -bottom-1 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-gray-50">
+                <label for="profile_picture_input" class="absolute -bottom-1 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-gray-50">
                     <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </label>
-                <input type="file" id="profile_picture" name="profile_picture" class="hidden" accept="image/*">
+                <input type="file" id="profile_picture_input" name="profile_picture" class="hidden" accept="image/*" onchange="previewImage(this)">
             </div>
             <p class="text-white text-xs mt-2">Change Picture</p>
         </div>
@@ -64,10 +64,12 @@
             <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
             <input 
                 type="email" 
-                id="email" 
+                id="email_display" 
                 value="{{ Auth::user()->email }}"
                 class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed" 
                 disabled>
+            <!-- Hidden email field untuk submit -->
+            <input type="hidden" name="email" value="{{ Auth::user()->email }}">
         </div>
 
         <!-- Gender -->
@@ -135,6 +137,59 @@
             @enderror
         </div>
 
+        <!-- Profile Picture -->
+        <div>
+            <label for="profile_picture" class="block text-sm font-medium text-gray-700 mb-1.5">Profile Picture</label>
+            
+            <!-- Current Profile Picture Preview -->
+            @if(Auth::user()->profile_picture)
+                <div class="mb-3">
+                    <img src="{{ Storage::url(Auth::user()->profile_picture) }}" 
+                         alt="Current Profile Picture" 
+                         class="w-24 h-24 rounded-full object-cover border-2 border-gray-200">
+                </div>
+            @endif
+            
+            <!-- File Input with Preview -->
+            <div class="space-y-2">
+                <input 
+                    type="file" 
+                    id="profile_picture" 
+                    name="profile_picture" 
+                    accept="image/*"
+                    onchange="previewProfileImage(event)"
+                    class="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                
+                <!-- Image Preview -->
+                <div id="imagePreviewContainer" class="hidden">
+                    <img id="imagePreview" class="w-24 h-24 rounded-full object-cover border-2 border-primary" alt="Preview">
+                </div>
+                
+                <p class="text-xs text-gray-500">Max 2MB. Supported formats: JPG, PNG, GIF</p>
+            </div>
+            
+            @error('profile_picture')
+                <p class="mt-1 text-xs text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Role -->
+        <div>
+            <label for="role" class="block text-sm font-medium text-gray-700 mb-1.5">Role</label>
+            <select 
+                id="role" 
+                name="role" 
+                class="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 appearance-none bg-white" 
+                style="background-image: url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e&quot;); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em;">
+                <option value="user" {{ old('role', Auth::user()->role ?? 'user') == 'user' ? 'selected' : '' }}>User</option>
+                <option value="seller" {{ old('role', Auth::user()->role ?? 'user') == 'seller' ? 'selected' : '' }}>Seller</option>
+                <option value="admin" {{ old('role', Auth::user()->role ?? 'user') == 'admin' ? 'selected' : '' }}>Admin</option>
+            </select>
+            @error('role')
+                <p class="mt-1 text-xs text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+
         <!-- Save Button -->
         <div class="pt-2">
             <button 
@@ -159,5 +214,46 @@
 
     <!-- Bottom Navigation -->
     <x-bottom-navigation />
+
+    @push('scripts')
+    <script>
+        function previewProfileImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    const container = document.getElementById('imagePreviewContainer');
+                    
+                    if (preview && container) {
+                        preview.src = e.target.result;
+                        container.classList.remove('hidden');
+                    }
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Legacy function for backward compatibility
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = document.querySelector('.w-24.h-24.rounded-full img');
+                    if (img) {
+                        img.src = e.target.result;
+                        img.classList.remove('object-contain', 'bg-white', 'p-2');
+                        img.classList.add('object-cover');
+                    }
+                };
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+    @endpush
 
 </x-guest-layout>

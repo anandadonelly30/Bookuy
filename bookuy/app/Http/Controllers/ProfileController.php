@@ -17,8 +17,10 @@ class ProfileController extends Controller
 {
     /**
      * Display the account/profile index page.
+     * 
+     * Shows the main account page with user information overview.
      */
-    public function index(Request $request): View
+    public function showAccountPage(Request $request): View
     {
         return view('profile.index', [
             'user' => $request->user(),
@@ -26,9 +28,12 @@ class ProfileController extends Controller
     }
 
     /**
-     * Display the user's profile form.
+     * Display the user's profile edit form.
+     * 
+     * Shows the form where users can edit their profile information
+     * including username, email, phone, gender, semester, description, and profile picture.
      */
-    public function edit(Request $request): View
+    public function showEditProfileForm(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
@@ -39,8 +44,11 @@ class ProfileController extends Controller
 
     /**
      * Update the user's profile information.
+     * 
+     * Processes the profile update including profile picture upload,
+     * validates input, and saves changes to the database.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function updateUserProfile(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
         $data = $request->validated();
@@ -69,9 +77,12 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Delete the user's account permanently.
+     * 
+     * Validates the user's password, logs them out, deletes their account,
+     * invalidates the session, and redirects to homepage.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function deleteUserAccount(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],

@@ -25,14 +25,19 @@ class OrderSeeder extends Seeder
         $address = $user->addresses()->first();
         if (! $address) {
             $address = Address::create([
-                'user_id'      => $user->id,
-                'nickname'     => 'Kampus',
-                'department'   => 'TI',
-                'full_address' => 'Jl. Contoh No. 123, Bandung',
-                'phone_number' => '081234567890',
-                'latitude'     => -6.2000000,
-                'longitude'    => 106.8166660,
-                'is_default'   => true,
+                'user_id'        => $user->id,
+                'label_address'  => 'Kampus',  // Updated field name
+                'receiver_name'  => $user->username,  // Required field from class diagram
+                'department'     => 'TI',
+                'street'         => 'Jl. Contoh No. 123',  // New field from class diagram
+                'city'           => 'Bandung',  // New field from class diagram
+                'province'       => 'Jawa Barat',  // New field from class diagram
+                'postal_code'    => '40132',  // New field from class diagram
+                'full_address'   => 'Jl. Contoh No. 123, Bandung',  // Kept for backward compatibility
+                'phone_number'   => '081234567890',
+                'latitude'       => -6.2000000,
+                'longitude'      => 106.8166660,
+                'is_default'     => true,
             ]);
         }
 
@@ -58,17 +63,18 @@ class OrderSeeder extends Seeder
                 'sub_total'      => $subTotal,
                 'admin_fee'      => $adminFee,
                 'shipping_fee'   => $shippingFee,
-                'total'          => $total,
-                'status'         => 'delivered',
+                'total_amount'   => $total,  // Updated field name from class diagram
+                'status'         => 'COMPLETED',  // Updated enum value from class diagram
                 'payment_method' => 'transfer',
+                'payment_status' => 'PAID',  // New field from class diagram
             ]);
 
             foreach ($selected as $p) {
                 OrderItem::create([
                     'order_id'     => $order->id,
-                    'product_id'   => $p->id,
+                    'book_id'      => $p->id,  // Updated field name from class diagram
                     'quantity'     => 1,
-                    'price'        => $p->price,
+                    'price_per_unit' => $p->price,  // Updated field name from class diagram
                     'product_name' => $p->name,
                 ]);
             }
@@ -76,7 +82,7 @@ class OrderSeeder extends Seeder
             // Sample notification for seeded order
             $user->notifications()->create([
                 'title'   => 'Order #' . $order->id . ' delivered',
-                'message' => 'Pesanan kamu telah sampai. Terima kasih!',
+                'description' => 'Pesanan kamu telah sampai. Terima kasih!',  // Updated field name
                 'icon'    => 'truck',
             ]);
         }
