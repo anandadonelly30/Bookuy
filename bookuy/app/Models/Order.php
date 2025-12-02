@@ -1,7 +1,5 @@
 <?php
 
-
-// FILE: app/Models/Order.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,18 +12,17 @@ class Order extends Model
 {
     use HasFactory;
     
-    // Updated to match class diagram
     protected $fillable = [
         'user_id', 
         'address_id', 
-        'sub_total',      // Enhancement: detailed breakdown
-        'shipping_fee',   // Enhancement: detailed breakdown
-        'admin_fee',      // Enhancement: detailed breakdown
-        'total',          // Keep for backward compatibility
-        'total_amount',   // New: matches class diagram
-        'status',         // Now uses ONGOING/COMPLETED
-        'payment_status', // New: matches class diagram
-        'payment_method'  // Keep for reference
+        'sub_total',
+        'shipping_fee',
+        'admin_fee',
+        'total',
+        'total_amount',
+        'status',
+        'payment_status',
+        'payment_method'
     ];
 
     public function user(): BelongsTo
@@ -43,7 +40,6 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
     
-    // Backward compatibility: total returns total_amount if available
     protected function total(): Attribute
     {
         return Attribute::make(

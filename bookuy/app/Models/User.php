@@ -1,5 +1,5 @@
 <?php
-// FILE: app/Models/User.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,16 +12,15 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    // Updated to match class diagram
     protected $fillable = [
-        'username',        // Renamed from 'name'
+        'username',
         'email',
         'password',
-        'gender',          // Enhancement (not in diagram)
-        'semester',        // Enhancement (not in diagram)
-        'description',     // Enhancement (not in diagram)
-        'no_telp',         // Renamed from 'phone_number'
-        'profile_picture', // Enhancement (not in diagram)
+        'gender',
+        'semester',
+        'description',
+        'no_telp',
+        'profile_picture',
         'role',
     ];
 
@@ -63,7 +62,6 @@ class User extends Authenticatable
         return $this->hasOne(Address::class)->where('is_default', true);
     }
     
-    // Backward compatibility accessors for views using old field names
     protected function name(): Attribute
     {
         return Attribute::make(

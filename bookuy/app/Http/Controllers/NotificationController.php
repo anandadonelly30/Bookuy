@@ -1,7 +1,5 @@
 <?php
 
-
-// FILE: app/Http/Controllers/NotificationController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -10,14 +8,6 @@ use App\Models\Notification;
 
 class NotificationController extends Controller
 {
-    /**
-     * View list of user notifications grouped by date.
-     * 
-     * USE CASE: ViewNotif
-     * Retrieves all notifications for the authenticated user,
-     * groups them by date (Today, Yesterday, or specific date),
-     * and displays them in chronological order.
-     */
     public function viewUserNotifications()
     {
         $notificationsCollection = Notification::where('user_id', Auth::id())
@@ -37,17 +27,10 @@ class NotificationController extends Controller
         return view('notifications.index', compact('notifications'));
     }
 
-    /**
-     * Mark a specific notification as read.
-     * 
-     * Updates the is_read status of a notification to true.
-     * Validates that the notification belongs to the authenticated user.
-     */
     public function markNotificationAsRead(Notification $notification)
     {
-        // Validate ownership and mark as read
         if ($notification->user_id === Auth::id()) {
-            $notification->update(['is_read' => true]); // Updated to use is_read (class diagram)
+            $notification->update(['is_read' => true]);
         }
         return redirect()->back();
     }

@@ -14,7 +14,7 @@ class CartItem extends Model
         'user_id',
         'product_id',
         'quantity',
-        'type'  // Now stores 'BUY' or 'RENT' (uppercase) to match class diagram
+        'type'
     ];
 
     public function user(): BelongsTo
@@ -22,26 +22,16 @@ class CartItem extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the book (product) associated with this cart item.
-     * 
-     * Relationship uses book_id foreign key (class diagram compliant).
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Book::class, 'book_id');
     }
     
-    /**
-     * Alias method for accessing book relationship.
-     * Provides semantic clarity that we're dealing with books.
-     */
     public function book(): BelongsTo
     {
         return $this->product();
     }
     
-    // Alias for class diagram compatibility (bookId instead of product_id)
     public function getBookIdAttribute()
     {
         return $this->product_id;
