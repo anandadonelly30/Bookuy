@@ -19,6 +19,64 @@
             min-height: 100vh;
         }
 
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 60px;
+        }
+
+        .loading-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.2));
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top: 3px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Logo pulse animation */
+        .loading-logo img {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* Auth Pages */
         .auth-page {
             background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
@@ -640,6 +698,14 @@
 </head>
 <body>
 
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo">
+        <img src="{{ asset('Logo.png') }}" alt="Logo">
+    </div>
+    <div class="loading-spinner"></div>
+</div>
+
 <!-- Sign Up Page -->
 <div id="signupPage" class="page active">
     <div class="auth-page">
@@ -936,6 +1002,28 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+    // Loading screen handler - only show once per session
+    document.addEventListener('DOMContentLoaded', function() {
+        const loadingScreen = document.getElementById('loadingScreen');
+
+        // Check if loading screen has been shown in this session
+        if (sessionStorage.getItem('loadingScreenShown')) {
+            // Already shown, hide immediately
+            loadingScreen.style.display = 'none';
+        } else {
+            // First visit, show loading screen for 2 seconds
+            sessionStorage.setItem('loadingScreenShown', 'true');
+            setTimeout(function() {
+                loadingScreen.classList.add('hidden');
+
+                // Remove from DOM after animation
+                setTimeout(function() {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 2000);
+        }
+    });
+
     function showPage(pageId) {
         document.querySelectorAll('.page').forEach(page => {
             page.classList.remove('active');

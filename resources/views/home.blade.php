@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Loading Screen for Homepage -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo">
+        <img src="{{ asset('Logo.png') }}" alt="Logo">
+    </div>
+    <div class="loading-spinner"></div>
+</div>
+
 <div id="homePage">
     <div class="home-page">
         <div class="home-header">
@@ -18,7 +26,7 @@
                     <i class="fas fa-shopping-cart"></i>
                 </div>
             </div>
-            
+
             <div class="search-container">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" class="search-input" placeholder="Search for Books...">
@@ -28,14 +36,14 @@
                 <i class="fas fa-microphone mic-icon"></i>
             </div>
         </div>
-        
+
         <div class="category-section">
             <div class="section-header">
                 <h4>Kategori</h4>
                 <a href="#" class="see-all">Lihat Semua</a>
             </div>
             <p style="color: #64748b; margin-bottom: 15px;">Pilih Kategori Bidang yang Kamu Inginkan</p>
-            
+
             <div class="category-grid">
                 <div class="category-card">
                     <div class="category-icon-box">
@@ -51,27 +59,27 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="category-section">
             <div class="section-header">
                 <h4>Recommended for you</h4>
             </div>
-            
+
             <div class="recommended-grid" id="recommendedBooksGrid">
                 <!-- Books will be loaded here dynamically -->
             </div>
         </div>
-        
+
         <div class="category-section">
             <div class="section-header">
                 <h4>Popular books</h4>
             </div>
-            
+
             <div class="popular-list" id="popularBooksList">
                 <!-- Popular books will be loaded here dynamically -->
             </div>
         </div>
-        
+
         <div class="bottom-nav">
             <div class="nav-container">
                 <a href="{{ url('/') }}" class="nav-item active">
@@ -91,6 +99,28 @@
 
 @push('scripts')
 <script>
+    // Loading screen handler - only show once when first opening the website
+    (function() {
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            // Check if user has already seen the loading screen in this session
+            if (sessionStorage.getItem('loadingScreenShown')) {
+                // Already shown before, hide immediately
+                loadingScreen.style.display = 'none';
+            } else {
+                // First time opening website, show loading screen for 2 seconds
+                sessionStorage.setItem('loadingScreenShown', 'true');
+                setTimeout(function() {
+                    loadingScreen.classList.add('hidden');
+                    // Remove from DOM after animation
+                    setTimeout(function() {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 2000);
+            }
+        }
+    })();
+
     document.addEventListener('DOMContentLoaded', async function() {
         const userName = localStorage.getItem('user_name');
         if (userName) {
