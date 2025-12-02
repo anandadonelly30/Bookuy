@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
-use App\Models\Product;
+use App\Models\Book;
 use App\Models\Notification;
 use App\Models\CartItem;
 
@@ -18,15 +18,15 @@ class MySqlSmokeTest extends TestCase
     {
         $user = User::factory()->create();
 
-        // Seed minimal products
-        $p1 = Product::create([
+        // Seed minimal books (products)
+        $p1 = Book::create([
             'name' => 'Algoritma Dasar',
             'description' => 'Buku algoritma untuk pemula',
             'price' => 75000,
             'stock' => 5,
             'type' => 'sell',
         ]);
-        $p2 = Product::create([
+        $p2 = Book::create([
             'name' => 'Pemrograman Web',
             'description' => 'Dasar-dasar PWEB',
             'price' => 64000,
@@ -58,7 +58,7 @@ class MySqlSmokeTest extends TestCase
     public function can_add_product_to_cart_via_json_endpoint()
     {
         $user = User::factory()->create();
-        $product = Product::create([
+        $product = Book::create([
             'name' => 'Matematika Lanjut',
             'price' => 82000,
             'stock' => 10,

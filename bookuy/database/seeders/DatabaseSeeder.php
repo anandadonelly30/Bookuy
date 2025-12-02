@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        // Seed products, cart items, notifications
+        // Seed books (products), cart items, notifications, orders
         $this->call([
-            ProductSeeder::class,
+            BookSeeder::class,  // Renamed from ProductSeeder to match class diagram
             CartSeeder::class,
             NotificationSeeder::class,
             OrderSeeder::class,

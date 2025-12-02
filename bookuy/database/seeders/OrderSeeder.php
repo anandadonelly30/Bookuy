@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
+use App\Models\Book;
 
 class OrderSeeder extends Seeder
 {
@@ -41,14 +41,14 @@ class OrderSeeder extends Seeder
             ]);
         }
 
-        $products = Product::inRandomOrder()->take(4)->get();
-        if ($products->isEmpty()) {
-            return; // Need products seeded first
+        $books = Book::inRandomOrder()->take(4)->get();
+        if ($books->isEmpty()) {
+            return; // Need books seeded first
         }
 
         // Create 2 sample orders
         for ($i = 0; $i < 2; $i++) {
-            $selected = $products->random(rand(1, min(3, $products->count())));
+            $selected = $books->random(rand(1, min(3, $books->count())));
             $subTotal = 0;
             foreach ($selected as $p) {
                 $subTotal += $p->price; // quantity = 1 for sample

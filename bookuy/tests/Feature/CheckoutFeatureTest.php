@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
-use App\Models\Product;
+use App\Models\Book;
 use App\Models\Address;
 use App\Models\CartItem;
 use App\Models\Order;
@@ -32,10 +32,10 @@ class CheckoutFeatureTest extends TestCase
             'is_default'   => true,
         ]);
 
-        // Create products & cart items
+        // Create books (products) & cart items
         $products = [];
         for ($i = 0; $i < 3; $i++) {
-            $p = Product::create([
+            $p = Book::create([
                 'name'        => 'Produk ' . $i,
                 'description' => 'Deskripsi produk ' . $i,
                 'price'       => 10000 + ($i * 5000),

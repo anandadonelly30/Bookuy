@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Product;
+use App\Models\Book;
 use App\Models\CartItem;
 
 class CartController extends Controller
@@ -58,13 +58,13 @@ class CartController extends Controller
     }
 
     /**
-     * Add a product to the shopping cart.
+     * Add a book (product) to the shopping cart.
      * 
-     * Validates stock availability, checks if product already exists in cart,
-     * maps product type to CartItem enum (sell→BUY, rent→RENT),
+     * Validates stock availability, checks if book already exists in cart,
+     * maps book type to CartItem enum (sell→BUY, rent→RENT),
      * and creates or updates cart item accordingly.
      */
-    public function addProductToCart(Request $request, Product $product)
+    public function addProductToCart(Request $request, Book $product)
     {
         // Check if product has stock
         if ($product->stock <= 0) {

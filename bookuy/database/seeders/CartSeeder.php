@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\CartItem;
-use App\Models\Product;
+use App\Models\Book;
 use App\Models\User;
 
 class CartSeeder extends Seeder
@@ -21,14 +21,14 @@ class CartSeeder extends Seeder
         // Clear existing cart items for test user
         CartItem::where('user_id', $user->id)->delete();
 
-        // Get some products
-        $matematika = Product::where('name', 'Matematika I')->where('type', 'sell')->first();
-        $mpb = Product::where('name', 'MPB Fundamental')->where('type', 'sell')->first();
-        $pweb = Product::where('name', 'Pemrograman Web')->where('type', 'sell')->first();
+        // Get some books (products)
+        $matematika = Book::where('name', 'Matematika I')->where('type', 'sell')->first();
+        $mpb = Book::where('name', 'MPB Fundamental')->where('type', 'sell')->first();
+        $pweb = Book::where('name', 'Pemrograman Web')->where('type', 'sell')->first();
         
-        // Rent products
-        $matematikaRent = Product::where('name', 'Matematika I')->where('type', 'rent')->first();
-        $mpbRent = Product::where('name', 'MPB Fundamental MPB')->where('type', 'rent')->first();
+        // Rent books
+        $matematikaRent = Book::where('name', 'Matematika I')->where('type', 'rent')->first();
+        $mpbRent = Book::where('name', 'MPB Fundamental MPB')->where('type', 'rent')->first();
 
         // Add to cart - Buy items (using class diagram enum 'BUY')
         if ($matematika) {

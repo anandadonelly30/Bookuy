@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\Book;
 
 class DashboardController extends Controller
 {
@@ -20,7 +20,7 @@ class DashboardController extends Controller
      */
     public function showHomepageWithProducts(Request $request)
     {
-        $query = Product::query();
+        $query = Book::query();
 
         // Search functionality
         if ($request->filled('search')) {
@@ -65,12 +65,12 @@ class DashboardController extends Controller
         $products = $query->get();
 
         // Recommended books (latest 6)
-        $recommendedBooks = Product::orderBy('created_at', 'desc')
+        $recommendedBooks = Book::orderBy('created_at', 'desc')
             ->take(6)
             ->get();
 
         // Popular books (just random for now, you can add view_count later)
-        $popularBooks = Product::inRandomOrder()
+        $popularBooks = Book::inRandomOrder()
             ->take(6)
             ->get();
 
