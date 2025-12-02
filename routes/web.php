@@ -1,26 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\SellerController;
+use App\Http\Controllers\CartController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('home');
-});
-
-Route::get('/bookuy', function () {
-    return view('home');
-});
-
-Route::get('/notifikasi', function () {
-    return view('notifications.index');
-});
+Route::get('/', [HomeController::class, 'showHomePage'])->name('home'); // When user hits '/', call homepage
+Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
+Route::get('/sellers/{id}', [SellerController::class, 'show'])->name('sellers.show');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
