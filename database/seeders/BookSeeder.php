@@ -14,12 +14,12 @@ class BookSeeder extends Seeder
     public function run(): void
     {
         // Clear existing seeded books/reviews to avoid duplicates
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         DB::table('book_category')->truncate();
         Review::truncate();
         Book::truncate();
         Category::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
 
         $seller = Seller::first() ?? Seller::create([
             'name' => 'Default Seller',
